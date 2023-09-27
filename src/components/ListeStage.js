@@ -1,6 +1,5 @@
 import React from "react";
 import Cards from "./card/Cards";
-
 import Stage from "./Stage";
 
 const ListeStage = (props) => {

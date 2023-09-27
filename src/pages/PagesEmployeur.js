@@ -63,13 +63,69 @@ const PagesEmployeur = () => {
     setIsFormOpen(false);
   };
 
+
+  const stageSubmitHandler  = async event =>  {
+     
+    try {
+    const reponseData = await fetch(
+        process.env.REACT_APP_BACKEND_URL + `/stages/ajouterStage`,
+        "POST",
+        JSON.stringify({
+          numContact: newStage.numContact,
+          nomEntreprise: newStage.nomEntreprise,
+          nomPoste: newStage.nomPoste
+        }),
+        {
+        "Content-Type": "application/json",
+        }
+    );
+    console.log(reponseData);
+    } catch (err) {
+    console.log(err);
+    }
+};
+
+  const buttonAjouterClick = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(process.env.REACT_APP_BACKEND_URL+'stages/ajouterStage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newStage)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Couldn't add stage.");
+      }
+
+      alert("Stage ajouté avec succès!");
+
+      setNewStage({
+        numContact: '',
+        nomEntreprise: '',
+        nomPoste: '',
+       
+      });
+
+    } catch (error) {
+      console.log(error);
+      alert("Une erreur est survenue lors de l'ajout du stage.");
+    }
+  }
+
   return (
     <div>
       <button onClick={() => setIsFormOpen(true)}>Ajout Stage</button>
       {isFormOpen && (
+        
         <div>
           <h2>Ajout Stage</h2>
-          <form>
+          <form onSubmit={stageSubmitHandler}>
             <label htmlFor="nomEntreprise">Nom de l'entreprise</label>
             <input
               type="text"
@@ -100,7 +156,7 @@ const PagesEmployeur = () => {
               required
             /><br /><br />
 
-            <button type="button" onClick={addStage}>Add</button>
+            <button type="submit" >Add</button>
             <button type="button" onClick={() => setIsFormOpen(false)}>Cancel</button>
           </form>
         </div>

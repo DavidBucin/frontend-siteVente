@@ -32,10 +32,8 @@ function PagesCreation() {
       return;
     }
 
-    
     const currentPath = window.location.pathname;
 
-    
     const segments = currentPath.split('/');
     segments.pop(); // Remove the last segment
     const parentPath = segments.join('/');
