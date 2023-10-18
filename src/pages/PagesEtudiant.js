@@ -23,8 +23,23 @@ nomPoste: "Developeur"
 ]
 const PagesEtudiant = () => {
 
-   
-
+    const [stageList, setStageList] = useState([]);
+    useEffect(() => {
+        // Fetch the list of stages from the backend when the component mounts
+        const fetchStages = async () => {
+          try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/stages/listeStage`);
+            if (response.ok) {
+              const data = await response.json();
+              setStageList(data.stage);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        };
+    
+        fetchStages();
+      }, []);
 return (
     <ListeStage stage={StageList} />
 );

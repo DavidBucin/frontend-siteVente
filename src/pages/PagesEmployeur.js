@@ -21,6 +21,7 @@ const StageList = [
 ];
 
 const PagesEmployeur = () => {
+  const [stageList, setStageList] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [newStage, setNewStage] = useState({
     numContact: "",
@@ -64,59 +65,37 @@ const PagesEmployeur = () => {
   };
 
 
-  const stageSubmitHandler  = async event =>  {
-     
-    try {
-    const reponseData = await fetch(
-        process.env.REACT_APP_BACKEND_URL + `/stages/ajouterStage`,
-        "POST",
-        JSON.stringify({
-          numContact: newStage.numContact,
-          nomEntreprise: newStage.nomEntreprise,
-          nomPoste: newStage.nomPoste
-        }),
-        {
-        "Content-Type": "application/json",
-        }
-    );
-    console.log(reponseData);
-    } catch (err) {
-    console.log(err);
+  const stageSubmitHandler = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/stages/ajouterStage", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newStage),
+    });
+
+    console.log(response); // Log the response for debugging
+
+    if (!response.ok) {
+      throw new Error('Failed to add stage.');
     }
+
+    // Reset the newStage state
+    setNewStage({
+      numContact: '',
+      nomEntreprise: '',
+      nomPoste: '',
+    });
+
+    alert('Stage ajouté avec succès!');
+  } catch (error) {
+    console.log(error);
+    alert("Une erreur est survenue lors de l'ajout du stage.");
+  }
 };
 
-  const buttonAjouterClick = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await fetch(process.env.REACT_APP_BACKEND_URL+'stages/ajouterStage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newStage)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Couldn't add stage.");
-      }
-
-      alert("Stage ajouté avec succès!");
-
-      setNewStage({
-        numContact: '',
-        nomEntreprise: '',
-        nomPoste: '',
-       
-      });
-
-    } catch (error) {
-      console.log(error);
-      alert("Une erreur est survenue lors de l'ajout du stage.");
-    }
-  }
 
   return (
     <div>
