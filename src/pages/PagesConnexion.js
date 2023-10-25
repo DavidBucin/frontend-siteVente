@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 function PagesConnexion() {
   const navigate = useNavigate();
-    const [formData, setFormData] = useState({ username: '', password: '', role:"etudiant"});
+    const [formData, setFormData] = useState({
+       courriel: '', 
+       motDePasse: '', 
+       role:"etudiant"
+      });
     
 
     
@@ -14,7 +18,7 @@ function PagesConnexion() {
   
     const handleSubmit = async (e) => {
       
-      if (formData.email === '' || formData.password === '') {
+      if (formData.courriel === '' || formData.motDePasse === '') {
         alert('Remplir le formulaire svp');
         return;
       } 
@@ -22,6 +26,22 @@ function PagesConnexion() {
 
       
           if (formData.role === 'etudiant') {
+            try {
+              const response = await fetch('https://gestion-stage-exe7.onrender.com/api/etudiants/' + formData.courriel.trim()).then(res => res.json()).then(etudiant => {
+
+              if (!res.ok) {
+                throw new Error('Network response was not ok');
+              }
+                console.log(etudiant);
+              });
+
+              const jsonData = await response.json();
+              console.log(res);
+            } catch (err) {
+              console.log(err);
+              throw err
+            }
+
             navigate('/etudiant');
           } else if (formData.role === 'employeur') {
             navigate('/employeur');
@@ -42,7 +62,7 @@ function PagesConnexion() {
         />
         <input
           type="password"
-          name="password"
+          name="motDePasse"
           placeholder="Mot de passe"
           value={formData.password}
           onChange={handleInputChange}

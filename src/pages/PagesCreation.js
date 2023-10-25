@@ -12,7 +12,7 @@ function PagesCreation() {
     telephone: '',
     adresse: '',
     nomEntreprise: '',
-    nomPoste: '',
+    posteTel: ''
   });
   const [role, setRole] = useState(
     'etudiant'
@@ -42,7 +42,7 @@ function PagesCreation() {
       formData.adresse.trim() === '' ||
       (role === 'employeur' && 
       (formData.nomEntreprise.trim() === '' || 
-      formData.poste.trim() === ''))
+      formData.posteTel.trim() === ''))
     );
   };
 
@@ -54,10 +54,24 @@ function PagesCreation() {
       return;
     }  
   
-    //if (role ===) {
-    //}
+    if (role === 'etudiant') {
       try {
-        const reponse = await fetch("`https://gestion-stage-exe7.onrender.com/api/etudiants/ajouterEtudiant", {
+        const reponse = await fetch("https://gestion-stage-exe7.onrender.com/api/etudiants/ajouterEtudiant", {
+          method: 'POST',                                          
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+
+        });
+      console.log(reponse);
+      } catch (err) {
+        console.log(err);
+        throw err
+      }
+    } else if (role === 'employeur') {
+      try {
+        const reponse = await fetch("https://gestion-stage-exe7.onrender.com/api/employeurs/ajouterEmployeur", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -66,15 +80,12 @@ function PagesCreation() {
 
         });
       console.log(reponse);
-    } catch (err) {
-      console.log(err);
-      throw err
+      } catch (err) {
+        console.log(err);
+        throw err
+      }
     }
-    
-    //const currentPath = window.location.pathname;
-    //const segments = currentPath.split('/');
-    //segments.pop();
-    //const parentPath = segments.join('/');
+
     window.location.href = '/';
 
   };
@@ -136,9 +147,9 @@ function PagesCreation() {
             />
             <input
               type="text"
-              name="poste"
+              name="posteTel"
               placeholder="Numéro de poste"
-              value={formData.poste}
+              value={formData.posteTel}
               onChange={handleInputChange}
             />
           </>
