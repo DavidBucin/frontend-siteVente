@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
+import { useHttpClient } from "../shared/hooks/http-hook";
+
 
 function PagesCreation() {
+  const {error, sendRequest, clearError } = useHttpClient();
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    role: 'etudiant', // Default role is set to 'etudiant'
+    courriel: '',
+    motDePasse: '',
+    prenom: '',
+    nom: '',
+    telephone: '',
+    adresse: '',
+    nomEntreprise: '',
+    nomPoste: '',
   });
+  const [role, setRole] = useState(
+    'etudiant'
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    // Validate "DA" field to allow only numbers
-    if (name === 'username' && !/^\d*$/.test(value)) {
-      // If value contains non-numeric characters, don't update the state
-      return;
+    if (name === 'role') {
+      setRole(value);
+    } else {
+      setFormData({ ...formData, [name]: value });
     }
-
-    setFormData({ ...formData, [name]: value });
   };
 
   const validateEmail = (email) => {
@@ -25,128 +32,106 @@ function PagesCreation() {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   };
 
-  const handleButtonClick = () => {
+  const isFormInvalid = () => {
+    return (
+      formData.courriel.trim() === '' || 
+      formData.motDePasse.trim() === '' || 
+      formData.prenom.trim() === '' || 
+      formData.nom.trim() === '' || 
+      formData.telephone.trim() === '' || 
+      formData.adresse.trim() === '' ||
+      (role === 'employeur' && 
+      (formData.nomEntreprise.trim() === '' || 
+      formData.poste.trim() === ''))
+    );
+  };
+
+  const handleButtonClick = async (event) =>  {
+    event.preventDefault();
     // Check if any inputs are empty
-    if (formData.name === '' || formData.email === '' || formData.password === '') {
+    if (isFormInvalid()) {
       alert('Remplir le formulaire svp');
       return;
+    }  
+  
+    //if (role ===) {
+    //}
+      try {
+        const reponse = await fetch("`https://gestion-stage-exe7.onrender.com/api/etudiants/ajouterEtudiant", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+
+        });
+      console.log(reponse);
+    } catch (err) {
+      console.log(err);
+      throw err
     }
-
-    const currentPath = window.location.pathname;
-
-    const segments = currentPath.split('/');
-    segments.pop(); // Remove the last segment
-    const parentPath = segments.join('/');
-
-    // Navigate to the parent path
+    
+    //const currentPath = window.location.pathname;
+    //const segments = currentPath.split('/');
+    //segments.pop();
+    //const parentPath = segments.join('/');
     window.location.href = '/';
+
   };
 
   return (
     <div>
       <h2>Créer un compte</h2>
       <form>
-        
-        
-        {formData.role === 'etudiant' && (
-          <>
-          <input
+        <input
           type="email"
-          name="email"
+          name="courriel"
           placeholder="Adresse courriel"
-          value={formData.email}
-          onChange={handleInputChange}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Mot de passe"
-            value={formData.password}
-            onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="name"
-              placeholder="Prénom"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="last_name"
-              placeholder="Nom"
-              value={formData.lastname}
-              onChange={handleInputChange}
-            />
-
-            <input
-              type="text"
-              name="telephone"
-              placeholder="Téléphone"
-              value={formData.telephone}
-              onChange={handleInputChange}
-            />
-
-            <input
-              type="text"
-              name="adresse"
-              placeholder="Adresse complète"
-              value={formData.adresse}
-              onChange={handleInputChange}
-            />
-            
-          </>
-        )}
-
-        {formData.role === 'employeur' && (
-          <>
-            <input
-              type="text"
-              name="entreprise"
-              placeholder="Nom de l'entreprise"
-              value={formData.entreprise}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="adresse"
-              placeholder="Adresse complète"
-              value={formData.adresse1}
-              onChange={handleInputChange}
-            />
-            <input
-              type="email"
-              name="adresse_courriel"
-              placeholder="Adresse courriel"
-              value={formData.adresse_courriel1}
-              onChange={handleInputChange}
-            />
-             <input
-          type="password"
-          name="password"
-          placeholder="Mot de passe"
-          value={formData.password1}
+          value={formData.courriel}
           onChange={handleInputChange}
         />
+        <input
+          type="password"
+          name="motDePasse"
+          placeholder="Mot de passe"
+          value={formData.motDePasse}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="prenom"
+          placeholder="Prénom"
+          value={formData.prenom}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="nom"
+          placeholder="Nom"
+          value={formData.nom}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="telephone"
+          placeholder="Téléphone"
+          value={formData.telephone}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="adresse"
+          placeholder="Adresse complète"
+          value={formData.adresse}
+          onChange={handleInputChange}
+        />
+        {role === 'employeur' && (
+          <>
             <input
               type="text"
-              name="prenom"
-              placeholder="Prénom"
-              value={formData.prenom1}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="nom"
-              placeholder="Nom"
-              value={formData.nom1}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="telephone"
-              placeholder="Téléphone"
-              value={formData.telephone1}
+              name="nomEntreprise"
+              placeholder="Nom de l'entreprise"
+              value={formData.nomEntreprise}
               onChange={handleInputChange}
             />
             <input
@@ -158,14 +143,13 @@ function PagesCreation() {
             />
           </>
         )}
-
         <div>
           <label>
             <input
               type="radio"
               name="role"
               value="etudiant"
-              checked={formData.role === 'etudiant'}
+              checked={role === 'etudiant'}
               onChange={handleInputChange}
             />
             Etudiant
@@ -175,7 +159,7 @@ function PagesCreation() {
               type="radio"
               name="role"
               value="employeur"
-              checked={formData.role === 'employeur'}
+              checked={role === 'employeur'}
               onChange={handleInputChange}
             />
             Employeur

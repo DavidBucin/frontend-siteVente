@@ -2,23 +2,7 @@ import React, { useState, useEffect } from 'react';
 import App from '../App';
 import ListeStage from '../components/ListeStage';
 
-const StageList = [
-  {
-    numContact: "514-420-6969",
-    nomEntreprise: "Apple",
-    nomPoste: "Developer"
-  },
-  {
-    numContact: "514-420-6969",
-    nomEntreprise: "Apple",
-    nomPoste: "Developer"
-  },
-  {
-    numContact: "514-420-6969",
-    nomEntreprise: "Apple",
-    nomPoste: "Developer"
-  }
-];
+
 
 const PagesEmployeur = () => {
   const [stageList, setStageList] = useState([]);
@@ -65,11 +49,14 @@ const PagesEmployeur = () => {
   };
 
 
+
+
+
   const stageSubmitHandler = async (event) => {
   setIsFormOpen(false);
   event.preventDefault();
   try {
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/stages", {
+    const response = await fetch("https://gestion-stage-exe7.onrender.com/api/stages", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -81,6 +68,7 @@ const PagesEmployeur = () => {
 
     if (!response.ok) {
       throw new Error('Failed to add stage.');
+      
     }
 
     // Reset the newStage state
@@ -93,8 +81,10 @@ const PagesEmployeur = () => {
     alert('Stage ajouté avec succès!');
   } catch (error) {
     console.log(error);
-    alert("Une erreur est survenue lors de l'ajout du stage.");
-  }
+    alert("Le stage existe déjà");
+  } 
+
+  
 };
 
 
@@ -141,7 +131,7 @@ const PagesEmployeur = () => {
           </form>
         </div>
       )}
-      <ListeStage stage={StageList} />
+      <ListeStage stage={stageList} />
     </div>
   );
 };

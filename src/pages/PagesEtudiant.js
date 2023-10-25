@@ -4,23 +4,7 @@ import React, { useState, useEffect } from 'react';
 import App from '../App';
 import ListeStage from '../components/ListeStage';
 
-const StageList = [
-    {
-numContact: "514-420-6969",
-nomEntreprise: "Apple",
-nomPoste: "Developeur"
-},
-{
-    numContact: "514-420-6969",
-    nomEntreprise: "Apple",
-    nomPoste: "Developeur"
-},
-{
-    numContact: "514-420-6969",
-    nomEntreprise: "Apple",
-    nomPoste: "Developeur"
-}
-]
+
 const PagesEtudiant = () => {
 
     const [stageList, setStageList] = useState([]);
@@ -28,7 +12,7 @@ const PagesEtudiant = () => {
         // Fetch the list of stages from the backend when the component mounts
         const fetchStages = async () => {
           try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/stages/listeStage`);
+            const response = await fetch(`https://gestion-stage-exe7.onrender.com/api/stages/listeStage`);
             if (response.ok) {
               const data = await response.json();
               setStageList(data.stage);
@@ -41,7 +25,7 @@ const PagesEtudiant = () => {
         fetchStages();
       }, []);
 return (
-    <ListeStage stage={StageList} />
+    <ListeStage stage={stageList} />
 );
 }
 export default PagesEtudiant;
