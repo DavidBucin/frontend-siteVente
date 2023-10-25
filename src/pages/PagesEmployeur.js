@@ -69,7 +69,7 @@ const PagesEmployeur = () => {
   setIsFormOpen(false);
   event.preventDefault();
   try {
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/stages/", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/stages", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
