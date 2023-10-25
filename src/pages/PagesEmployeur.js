@@ -66,9 +66,10 @@ const PagesEmployeur = () => {
 
 
   const stageSubmitHandler = async (event) => {
+  setIsFormOpen(false);
   event.preventDefault();
   try {
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/stages/ajouterStage", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/stages/", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ const PagesEmployeur = () => {
             /><br /><br />
 
             <button type="submit" >Add</button>
-            <button type="button" onClick={() => setIsFormOpen(false)}>Cancel</button>
+            <button type="button" onClick={stageSubmitHandler}>Cancel</button>
           </form>
         </div>
       )}
