@@ -72,6 +72,8 @@ const PagesEmployeur = () => {
       throw new Error('Failed to add stage.');
       
     }
+    const data = await response.json();
+    setStageList(data.stage);
 
     // Reset the newStage state
     setNewStage({
@@ -81,7 +83,8 @@ const PagesEmployeur = () => {
     });
 
     alert('Stage ajouté avec succès!');
-    window.location.reload();
+    
+   
   } catch (error) {
     console.log(error);
     alert("Le stage existe déjà");
