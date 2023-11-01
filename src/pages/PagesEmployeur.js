@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useLocation } from "react-router-dom";
 import App from '../App';
 import ListeStage from '../components/ListeStage';
-
 
 
 const PagesEmployeur = () => {
@@ -12,6 +12,31 @@ const PagesEmployeur = () => {
     nomEntreprise: "",
     nomPoste: ""
   });
+  const { state: { employeur } = {} } = useLocation();
+  console.log(useLocation())
+  console.log(employeur)
+
+   useEffect(() => {
+    // Fetch the list of stages from the backend when the component mounts
+    const fetchStages = async () => {
+      try {
+        const response = await fetch("https://gestion-stage-exe7.onrender.com/api/stages/" + employeur.emp.nomEntreprise);
+        if (response.ok) {
+          const data = await response.json();
+          setStageList(data.stage);
+          setNewStage({
+            numContact: '',
+            nomEntreprise: employeur.emp.nomEntreprise,
+            nomPoste: '',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchStages();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,36 +52,13 @@ const PagesEmployeur = () => {
       newStage.nomPoste.trim() !== ""
     );
   };
-  const addStage = () => {
-    if (!isFormValid()) {
-        alert("Remplir les champs svp");
-        return;
-      }
-  
-      // You can add the newStage data to your StageList or perform further processing here.
-      // For now, let's just alert the new stage data.
-      alert("Stage a été ajouté\nNom du companie: " + newStage.nomEntreprise + "\nContact Number: " + newStage.numContact + "\nJob Title: " + newStage.nomPoste);
-  
-      // Reset the newStage state
-    setNewStage({
-      numContact: "",
-      nomEntreprise: "",
-      nomPoste: ""
-    });
-
-    // Close the form
-    setIsFormOpen(false);
-  };
-
-
-
-
 
   const stageSubmitHandler = async (event) => {
+  
   setIsFormOpen(false);
   event.preventDefault();
   try {
-    const response = await fetch("https://gestion-stage-exe7.onrender.com/api/stages", {
+    const response = await fetch("https://gestion-stage-exe7.onrender.com/api/stages/", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,11 +76,12 @@ const PagesEmployeur = () => {
     // Reset the newStage state
     setNewStage({
       numContact: '',
-      nomEntreprise: '',
+      nomEntreprise: employeur.emp.nomEntreprise,
       nomPoste: '',
     });
 
     alert('Stage ajouté avec succès!');
+    window.location.reload();
   } catch (error) {
     console.log(error);
     alert("Le stage existe déjà");
@@ -101,9 +104,8 @@ const PagesEmployeur = () => {
               type="text"
               id="nomEntreprise"
               name="nomEntreprise"
-              value={newStage.nomEntreprise}
-              onChange={handleInputChange}
-              required
+              value={employeur.emp.nomEntreprise}
+              disabled
             /><br /><br />
 
             <label htmlFor="numContact">Numero de contact:</label>
