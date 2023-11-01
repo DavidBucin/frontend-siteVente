@@ -27,7 +27,7 @@ function PagesConnexion() {
       
           if (formData.role === 'etudiant') {
             try {
-              const response = await fetch('https://gestion-stage-exe7.onrender.com/api/etudiants/' + formData.courriel.trim()).then(res => res.json()).then(etudiant => {
+              const res = await fetch('https://gestion-stage-exe7.onrender.com/api/etudiants/l' /*+ formData.courriel.trim()*/).then(res => res.json()).then(etudiant => {
 
               if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -35,7 +35,7 @@ function PagesConnexion() {
                 console.log(etudiant);
               });
 
-              const jsonData = await response.json();
+              const jsonData = await res.json();
               console.log(res);
             } catch (err) {
               console.log(err);
