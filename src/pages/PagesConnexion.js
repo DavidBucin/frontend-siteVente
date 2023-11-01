@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 function PagesConnexion() {
   const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -7,8 +8,6 @@ function PagesConnexion() {
        motDePasse: '', 
        role:"etudiant"
       });
-    
-
     
 
     const handleInputChange = (e) => {
@@ -23,27 +22,27 @@ function PagesConnexion() {
         return;
       } 
       else {
-
-      
+          
           if (formData.role === 'etudiant') {
-            try {
-              const res = await fetch('https://gestion-stage-exe7.onrender.com/api/etudiants/l' /*+ formData.courriel.trim()*/).then(res => res.json()).then(etudiant => {
 
-              if (!res.ok) {
-                throw new Error('Network response was not ok');
+            fetch('https://gestion-stage-exe7.onrender.com/api/etudiants/' + formData.courriel.trim()).then(response => response.json()).then(etudiant => {
+              console.log(etudiant);
+              console.log(etudiant.etu.motDePasse);
+              console.log(formData.motDePasse.trim());
+              if (etudiant.etu.motDePasse === formData.motDePasse.trim()) {
+                navigate('/etudiant');
+              } else {
+                alert("courriel ou mot de passe invalide");
+                return;
               }
-                console.log(etudiant);
-              });
-
-              const jsonData = await res.json();
-              console.log(res);
-            } catch (err) {
-              console.log(err);
-              throw err
-            }
-
-            navigate('/etudiant');
+            })
+            .catch(error => {
+              console.log(error);
+              alert("courriel ou mot de passe invalide");
+              return;
+            });
           } else if (formData.role === 'employeur') {
+            
             navigate('/employeur');
           }
       }   
