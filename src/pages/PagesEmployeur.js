@@ -73,7 +73,10 @@ const PagesEmployeur = () => {
       
     }
     const data = await response.json();
-    setStageList(data.stage);
+    
+    setStageList(Array.from(data.stage));
+
+    console.log(Array.from(stageList) + " TEST")
 
     // Reset the newStage state
     setNewStage({
@@ -83,6 +86,7 @@ const PagesEmployeur = () => {
     });
 
     alert('Stage ajouté avec succès!');
+    window.location.reload(false);
     
    
   } catch (error) {
