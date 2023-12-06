@@ -7,6 +7,7 @@ import ListeStage from '../components/ListeStage';
 
 const PagesEtudiant = () => {
 
+  const role = "etudiant";
     const [stageList, setStageList] = useState([]);
     useEffect(() => {
         // Fetch the list of stages from the backend when the component mounts
@@ -25,7 +26,7 @@ const PagesEtudiant = () => {
         fetchStages();
       }, []);
 return (
-    <ListeStage stage={stageList} />
+    <ListeStage stage={stageList} role={role} />
 );
 }
 export default PagesEtudiant;

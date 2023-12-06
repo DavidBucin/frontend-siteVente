@@ -26,6 +26,7 @@ function PagesConnexion() {
       else {
           
         if (formData.role === 'etudiant') {
+          
           fetch('https://gestion-stage-exe7.onrender.com/api/etudiants/' + formData.courriel.trim()).then(response => response.json()).then(etudiant => {
             console.log(etudiant);
             if (etudiant.etu.motDePasse === formData.motDePasse.trim()) {
@@ -44,7 +45,7 @@ function PagesConnexion() {
           fetch('https://gestion-stage-exe7.onrender.com/api/employeurs/' + formData.courriel.trim()).then(response => response.json()).then(employeur => {
             console.log(employeur);
             if (employeur.emp.motDePasse === formData.motDePasse.trim()) {
-              navigate('/employeur', { state: {employeur: employeur} });
+              navigate('/employeur', { state: { nomEntreprise: employeur.emp.nomEntreprise }});
             } else {
               alert("courriel ou mot de passe invalide");
               return;

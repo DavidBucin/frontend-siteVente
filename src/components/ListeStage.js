@@ -16,7 +16,7 @@ const ListeStage = (props) => {
         return (
             <ul className="stage-list">
               {props.stage.map((stage) => (
-                <Stage key={stage.compagnie} stage={stage} />
+                <Stage key={stage.compagnie} stage={stage} role={props.role}  />
               ))}
             </ul>
           );

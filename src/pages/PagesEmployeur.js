@@ -12,21 +12,21 @@ const PagesEmployeur = () => {
     nomEntreprise: "",
     nomPoste: ""
   });
-  const { state: { employeur } = {} } = useLocation();
-  console.log(useLocation())
-  console.log(employeur)
+  const role = "employeur";
+  const { state: { nomEntreprise } = {} } = useLocation();
+  console.log(nomEntreprise);
 
    useEffect(() => {
     // Fetch the list of stages from the backend when the component mounts
     const fetchStages = async () => {
       try {
-        const response = await fetch("https://gestion-stage-exe7.onrender.com/api/stages/" + employeur.emp.nomEntreprise);
+        const response = await fetch("https://gestion-stage-exe7.onrender.com/api/stages/parEntreprise/" + nomEntreprise);
         if (response.ok) {
           const data = await response.json();
           setStageList(data.stage);
           setNewStage({
             numContact: '',
-            nomEntreprise: employeur.emp.nomEntreprise,
+            nomEntreprise: nomEntreprise,
             nomPoste: '',
           });
         }
@@ -81,7 +81,7 @@ const PagesEmployeur = () => {
     // Reset the newStage state
     setNewStage({
       numContact: '',
-      nomEntreprise: employeur.emp.nomEntreprise,
+      nomEntreprise: nomEntreprise,
       nomPoste: '',
     });
 
@@ -111,7 +111,7 @@ const PagesEmployeur = () => {
               type="text"
               id="nomEntreprise"
               name="nomEntreprise"
-              value={employeur.emp.nomEntreprise}
+              value={nomEntreprise}
               disabled
             /><br /><br />
 
@@ -140,7 +140,7 @@ const PagesEmployeur = () => {
           </form>
         </div>
       )}
-      <ListeStage stage={stageList} />
+      <ListeStage stage={stageList} role={role} />
     </div>
   );
 };
