@@ -1,8 +1,8 @@
 import React from "react";
-
 import "./Cards.css";
 
 function Cards(props) {
+    
 
     const classes = "card " + props.className;
     return(
@@ -10,6 +10,8 @@ function Cards(props) {
         <div className={classes}>
             {props.children}
         </div>
+
+       
     );
 }
 

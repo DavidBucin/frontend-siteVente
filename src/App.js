@@ -5,6 +5,7 @@ import PagesConnexion from "./pages/PagesConnexion";
 import PagesCreation from './pages/PagesCreation';
 import PagesEtudiant from './pages/PagesEtudiant';
 import PagesEmployeur from "./pages/PagesEmployeur";
+import PagesStageEmployeur from "./pages/PagesStageEmployeur"
 import { BrowserRouter as Router, Route, Routes,} from "react-router-dom"
 function App() {
   
@@ -20,6 +21,7 @@ function App() {
               <Route path="/employeur" element={<PagesEmployeur />} />
               <Route path='/connexion' element={<PagesConnexion />} />
               <Route path='/creation' element={<PagesCreation />} />
+              <Route path='/employeur/:stageId' element={<PagesStageEmployeur />} />
             </Routes>
 
 
